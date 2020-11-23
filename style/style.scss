@@ -17,8 +17,7 @@ Example:
 
 .background-image {
    /* https://css-tricks.com/perfect-full-page-background-image/ */
-   background: url("../images/background-landing.jpg") no-repeat center center
-      fixed;
+   background: url("../images/girl-hourglass.jpg") no-repeat center center fixed;
    background-size: cover;
    min-height: 100vh;
 }
@@ -38,10 +37,10 @@ Example:
    font-weight: $font-weight-normal;
 }
 
-.card-body {
-   color: $white;
-   font-family: $font-family-serif;
-}
+// .card-body {
+//    color: $white;
+//    font-family: $font-family-serif;
+// }
 
 .card-body.bg-primary {
    border-top-left-radius: $border-radius;
@@ -113,4 +112,14 @@ h1 {
 
 .landing {
    padding: 3;
+}
+
+.cal-box {
+   min-width: 30px;
+}
+
+.cal-header {
+   @include media-breakpoint-only(xs) {
+      font-size: 8px;
+   }
 }
