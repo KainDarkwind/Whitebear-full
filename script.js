@@ -11,6 +11,14 @@ $("#sign-up").click(function () {
    $("#intro-card").toggleClass("d-none");
 });
 
+$("#delete-button").click(function () {
+   $("#delete-card").toggleClass("d-none");
+});
+
+$("#create-imagery-input").click(function () {
+   console.log("you clicked shit");
+});
+
 // $("#lets-go").click(function () {
 //    $("#sign-up-card").toggleClass("d-none");
 //    $("#intro-card").toggleClass("d-none");
