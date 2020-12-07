@@ -14,6 +14,7 @@ $("#sign-up").click(function () {
 $("#delete-button").click(function () {
    $("#delete-card").toggleClass("d-none");
 });
+
 let imageryCharsCount = 0;
 $("#create-imagery-input").keyup(function (e) {
    console.log("Event", e);
@@ -28,8 +29,19 @@ $("#create-imagery-input").keyup(function (e) {
    const textLength = text.length;
    console.log(`The length is: ${textLength}`);
 
-   //update the character counter on the page
+   if (textLength === 0) {
+      console.log("no text entered");
+      $("#save-card").addClass("disabled");
+   } else if (textLength > 240) {
+      console.log("too much entered");
+      $("#save-card").addClass("disabled");
+      $("#create-char-count").addClass("text-danger");
+   } else if (textLength > 0 || textLength <= 240) {
+      console.log("just right");
+      $("#save-card").removeClass("disabled");
+   }
 
+   //update the character counter on the page
    $("#create-char-count").html(textLength);
 });
 
