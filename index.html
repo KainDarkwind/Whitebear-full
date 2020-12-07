@@ -43,9 +43,35 @@
                                  Let's get you signed up.
                               </p>
                               <p class="mt-6">Email address</p>
-                              <input class="form-control" type="text" />
+                              <input
+                                 class="form-control"
+                                 id="sign-up-email"
+                                 type="text"
+                              />
+                              <p
+                                 class="d-none text-danger"
+                                 id="no-email-warning"
+                              >
+                                 Please enter your email address.
+                              </p>
                               <p>Password</p>
-                              <input class="form-control" type="text" />
+                              <input
+                                 class="form-control"
+                                 id="sign-up-password"
+                                 type="text"
+                              />
+                              <p
+                                 class="d-none text-danger"
+                                 id="no-password-warning"
+                              >
+                                 Please create a password.
+                              </p>
+                              <p
+                                 class="d-none text-danger"
+                                 id="short-password-warning"
+                              >
+                                 Your password must be at least 9 characters.
+                              </p>
 
                               <button
                                  class="btn mt-5 landing-button btn-primary btn-block"
