@@ -15,29 +15,22 @@ $("#delete-button").click(function () {
    $("#delete-card").toggleClass("d-none");
 });
 let imageryCharsCount = 0;
-$("#create-imagery-input").keydown(function (e) {
-   const key = e.which;
-   console.log(key);
+$("#create-imagery-input").keyup(function (e) {
+   console.log("Event", e);
 
-   //If the key pressed is backspace, counter -1.
-   if (key === 8) {
-      console.log("user pressed backspace");
-      imageryCharsCount -= 1;
-      if (imageryCharsCount < 0) {
-         console.log("enter negative");
-         imageryCharsCount = 0;
-      }
-   } else if (key === 16 || key === 20 || key === 9 || key === 18) {
-      // shift, caps, tab was pressed
-      console.log("doesn't count");
-   } else {
-      //Else, counter +1.
-      console.log("user pressed another key");
-      imageryCharsCount += 1;
-   }
+   //get the text from textarea
 
-   console.log("Total inputted chars: ", imageryCharsCount);
-   $("#create-char-count").html(imageryCharsCount);
+   const text = e.target.value;
+   console.log(`inputted: ${text}`);
+
+   //check the length of the text
+
+   const textLength = text.length;
+   console.log(`The length is: ${textLength}`);
+
+   //update the character counter on the page
+
+   $("#create-char-count").html(textLength);
 });
 
 let createAnswerInputCharsCount = 0;
