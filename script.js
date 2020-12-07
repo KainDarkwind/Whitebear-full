@@ -77,66 +77,59 @@ $("#answer-input").keyup(function (e) {
    $("#answer-char-count").html(textLength);
 });
 
-let editTopCharsCount = 0;
-$("#top-text-edit").keyup(function (e) {
+let topCharsCount = 0;
+let bottomCharsCount = 0;
+$("#top-text-edit, #bottom-text-edit").keyup(function (e) {
    console.log("Event", e);
 
    //get the text from textarea
 
-   const text = e.target.value;
-   console.log(`inputted: ${text}`);
+   const topText = $("#top-text-edit").val();
+   console.log(`inputted: ${topText}`);
+   const bottomText = $("#bottom-text-edit").val();
+   console.log(`inputted: ${bottomText}`);
 
    //check the length of the text
 
-   const textLength = text.length;
-   console.log(`The length is: ${textLength}`);
+   const topTextLength = topText.length;
+   console.log(`The top length is: ${topTextLength}`);
 
-   if (textLength === 0) {
-      console.log("no top text entered");
+   const bottomTextLength = bottomText.length;
+   console.log(`The bottom length is: ${bottomTextLength}`);
+
+   if (topTextLength === 0 || bottomTextLength === 0) {
+      console.log("form not complete");
       $("#save-edit-card").addClass("disabled");
-   } else if (textLength > 240) {
+   }
+
+   if (topTextLength > 240) {
       console.log("too much top entered");
       $("#save-edit-card").addClass("disabled");
       $("#top-char-count").addClass("text-danger");
-   } else if (textLength > 0 || textLength <= 240) {
-      console.log("just right");
-      $("#save-edit-card").removeClass("disabled");
-      $("#top-char-count").removeClass("text-danger");
    }
 
-   //update the character counter on the page
-   $("#top-char-count").html(textLength);
-});
-
-let editBottomCharsCount = 0;
-$("#bottom-text-edit").keyup(function (e) {
-   console.log("Event", e);
-
-   //get the text from textarea
-
-   const text = e.target.value;
-   console.log(`inputted: ${text}`);
-
-   //check the length of the text
-
-   const textLength = text.length;
-   console.log(`The length is: ${textLength}`);
-
-   if (textLength === 0) {
-      console.log("no bottom text entered");
-      $("#save-edit-card").addClass("disabled");
-   } else if (textLength > 240) {
+   if (bottomTextLength > 240) {
       console.log("too much bottom entered");
       $("#save-edit-card").addClass("disabled");
       $("#bottom-char-count").addClass("text-danger");
-   } else if (textLength > 0 || textLength <= 240) {
+   }
+
+   //Everything is good
+   if (
+      topTextLength > 0 &&
+      bottomTextLength > 0 &&
+      topTextLength <= 240 &&
+      bottomTextLength <= 240
+   ) {
       console.log("just right");
       $("#save-edit-card").removeClass("disabled");
+      $("#top-char-count").removeClass("text-danger");
       $("#bottom-char-count").removeClass("text-danger");
    }
 
    //update the character counter on the page
-   $("#bottom-char-count").html(textLength);
+   $("#top-char-count").html(topTextLength);
+   $("#bottom-char-count").html(bottomTextLength);
 });
 
 $("#lets-go").click(function (e) {
@@ -145,17 +138,29 @@ $("#lets-go").click(function (e) {
    //check if email empty
 
    const emailInput = $("#sign-up-email").val();
-   const emailLength = emailInput.length;
-   console.log(`email inputted: ${emailInput}`);
+   const trimmedEmailInput = emailInput.trim();
+   const normalizedEmailInput = trimmedEmailInput.toLowerCase();
+   const emailLength = normalizedEmailInput.length;
+   const delimiter = "@";
+   const indexOfLocal = normalizedEmailInput.indexOf(delimiter);
+   const indexofDomain = normalizedEmailInput.lastIndexOf(delimiter);
+   const localEmail = normalizedEmailInput.slice(0, indexOfLocal);
+   const domainEmail = normalizedEmailInput.slice(0, indexofDomain);
+
+   console.log(`email input: ${normalizedEmailInput}`);
+   console.log(`email length: ${emailLength}`);
+   console.log(`The local part is: ${localEmail}`);
+   console.log(`The domain name is: ${domainEmail}`);
 
    if (emailLength === 0) {
       console.log("no email entered");
-      //remove d-none from #no-email-warning  add class 'is-invalid' to #sign-up-email
-      $("#no-email-warning").removeClass("d-none");
+      //remove d-none from #email-warning,  add class 'is-invalid' to #sign-up-email
+      $("#email-warning").removeClass("d-none");
+      $("#email-warning").html("Please enter your email.");
       $("#sign-up-email").addClass("is-invalid");
    } else if (emailLength > 0) {
-      console.log("just right email");
-      $("#no-email-warning").addClass("d-none");
+      console.log("email just right");
+      $("#email-warning").addClass("d-none");
       $("#sign-up-email").removeClass("is-invalid");
    }
 
@@ -164,21 +169,29 @@ $("#lets-go").click(function (e) {
    const passwordInput = $("#sign-up-password").val();
    const passwordLength = passwordInput.length;
    console.log(`password inputted: ${passwordInput}`);
+   emailToSearchFor = "localEmail";
 
    if (passwordLength === 0) {
       console.log("no password entered");
       //remove d-none from #no-email-warning  add class 'is-invalid' to #sign-up-email
-      $("#no-password-warning").removeClass("d-none");
+      $("#password-warning").removeClass("d-none");
+      $("#password-warning").html("Please create a password.");
       $("#sign-up-password").addClass("is-invalid");
    } else if (passwordLength < 9) {
       console.log("short password entered");
-      $("#short-password-warning").removeClass("d-none");
-      $("#no-password-warning").addClass("d-none");
+      $("#password-warning").removeClass("d-none");
+      $("#password-warning").html(
+         "Your password must be at least 9 characters."
+      );
       $("#sign-up-password").addClass("is-invalid");
+   } else if (passwordInput.includes(localEmail)) {
+      console.log("password contains email");
+      $("#password-warning").removeClass("d-none");
+      $("#sign-up-password").addClass("is-invalid");
+      $("#password-warning").html("Your password can't be shit.");
    } else if (passwordLength > 8) {
       console.log("just right password");
-      $("#short-password-warning").addClass("d-none");
-      $("#no-password-warning").addClass("d-none");
+      $("#password-warning").addClass("d-none");
       $("#sign-up-password").removeClass("is-invalid");
    }
 
@@ -199,43 +212,43 @@ $("#lets-go").click(function (e) {
    // console.log(`The length is: ${textLength}`);
 });
 
-$("#sign-up-email").keyup(function (e) {
-   console.log("Event", e);
+// $("#sign-up-email").keyup(function (e) {
+//    console.log("Event", e);
 
-   //get the text from textarea
+//    //get the text from textarea
 
-   const text = e.target.value;
-   console.log(`inputted: ${text}`);
+//    const text = e.target.value;
+//    console.log(`inputted: ${text}`);
 
-   //check the length of the text
+//    //check the length of the text
 
-   const textLength = text.length;
-   console.log(`The length is: ${textLength}`);
+//    const textLength = text.length;
+//    console.log(`The length is: ${textLength}`);
 
-   if (textLength === 0) {
-      console.log("email empty");
-   }
-});
+//    if (textLength === 0) {
+//       console.log("email empty");
+//    }
+// });
 
-$("#sign-up-password").keyup(function (e) {
-   console.log("Event", e);
+// $("#sign-up-password").keyup(function (e) {
+//    console.log("Event", e);
 
-   //get the text from textarea
+//    //get the text from textarea
 
-   const text = e.target.value;
-   console.log(`inputted: ${text}`);
+//    const text = e.target.value;
+//    console.log(`inputted: ${text}`);
 
-   //check the length of the text
+//    //check the length of the text
 
-   const textLength = text.length;
-   console.log(`The length is: ${textLength}`);
+//    const textLength = text.length;
+//    console.log(`The length is: ${textLength}`);
 
-   if (textLength === 0) {
-      console.log("password empty");
-   } else if (textLength < 9) {
-      console.log("password short");
-   }
-});
+//    if (textLength === 0) {
+//       console.log("password empty");
+//    } else if (textLength < 9) {
+//       console.log("password short");
+//    }
+// });
 
 // $("#lets-go").click(function () {
 //    $("#sign-up-card").toggleClass("d-none");
