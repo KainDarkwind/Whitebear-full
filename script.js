@@ -14,20 +14,36 @@ $("#sign-up").click(function () {
 $("#delete-button").click(function () {
    $("#delete-card").toggleClass("d-none");
 });
-let createImageryInputCharsCount = 0;
-$("#create-imagery-input").keypress(function () {
-   createImageryInputCharsCount += 1;
+let imageryCharsCount = 0;
+$("#create-imagery-input").keydown(function (e) {
+   const key = e.which;
+   console.log(key);
 
-   const maxChars = 240;
-   console.log("add it", createImageryInputCharsCount);
-   $("#create-char-count").html(createImageryInputCharsCount);
+   //If the key pressed is backspace, counter -1.
+   if (key === 8) {
+      console.log("user pressed backspace");
+      imageryCharsCount -= 1;
+      if (imageryCharsCount < 0) {
+         console.log("enter negative");
+         imageryCharsCount = 0;
+      }
+   } else if (key === 16 || key === 20 || key === 9 || key === 18) {
+      // shift, caps, tab was pressed
+      console.log("doesn't count");
+   } else {
+      //Else, counter +1.
+      console.log("user pressed another key");
+      imageryCharsCount += 1;
+   }
+
+   console.log("Total inputted chars: ", imageryCharsCount);
+   $("#create-char-count").html(imageryCharsCount);
 });
 
 let createAnswerInputCharsCount = 0;
 $("#create-answer-input").keypress(function () {
    createAnswerInputCharsCount += 1;
 
-   const maxChars = 240;
    console.log("add it", createAnswerInputCharsCount);
    $("#create-answer-char-count").html(createAnswerInputCharsCount);
 });
