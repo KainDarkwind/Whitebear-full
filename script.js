@@ -188,7 +188,9 @@ $("#lets-go").click(function (e) {
       console.log("password contains email");
       $("#password-warning").removeClass("d-none");
       $("#sign-up-password").addClass("is-invalid");
-      $("#password-warning").html("Your password can't be shit.");
+      $("#password-warning").html(
+         "All or part of your email address cannot be used in your password."
+      );
    } else if (passwordLength > 8) {
       console.log("just right password");
       $("#password-warning").addClass("d-none");
