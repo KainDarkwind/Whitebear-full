@@ -335,6 +335,8 @@ $("#lets-go").click(function (e) {
    }
 });
 
+//Testing the commit
+
 // $("#sign-up-email").keyup(function (e) {
 //    console.log("Event", e);
 
