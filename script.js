@@ -15,15 +15,33 @@ $("#delete-button").click(function () {
    $("#delete-card").toggleClass("d-none");
 });
 
-let createImageryInputCharsCount = 0;
-$("#create-imagery-input").keypress(function () {
+let imageryCharsCount = 0;
+$("#create-imagery-input").keydown(function (e) {
    console.log("pressed key in text area");
+   console.log(e.which);
+   //If the key is backspace, decrement
+   const key = e.which;
 
-   createImageryInputCharsCount += 1; /*This lets me add 1 to the variable 
-   createImageryInputCharsCount++; also would add 1.
+   if (key === 8) {
+      console.log("The user pressed backspace!");
+      imageryCharsCount--;
+      if (imageryCharsCount < 0) {
+         console.log("You have entered negative territory");
+         imageryCharsCount = 0;
+      }
+   } else if (key === 16 || key === 18) {
+      console.log("This doesn't count");
+   } else {
+      console.log("The user pressed other key!");
+      imageryCharsCount += 1;
+      //If the key is anything else, increment.
+   }
+
+   /*This lets me add 1 to the variable 
+   imageryCharsCount++; also would add 1.
    */
-   console.log("Total input chars: ", createImageryInputCharsCount);
-   $("#create-char-count").html(createImageryInputCharsCount);
+   console.log("Total input chars: ", imageryCharsCount);
+   $("#create-char-count").html(imageryCharsCount);
 });
 
 let editTopCharsCount = 0;
