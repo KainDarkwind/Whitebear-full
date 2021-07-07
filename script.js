@@ -6,62 +6,108 @@ $("#save-edit-card").click(function () {
    $("#overlay-fail").toggleClass("d-flex d-none");
 });
 
-$("#sign-up").click(function () {
+/*$("#sign-up").click(function () {
    $("#sign-up-card").toggleClass("d-none");
    $("#intro-card").toggleClass("d-none");
-});
+});*/
+//Commented out for testing purposes.  Also switched d-none on these elements.
 
 $("#delete-button").click(function () {
    $("#delete-card").toggleClass("d-none");
 });
 
-let imageryCharsCount = 0;
-$("#create-imagery-input").keydown(function (e) {
-   console.log("pressed key in text area");
-   console.log(e.which);
-   //If the key is backspace, decrement
-   const key = e.which;
+$("#create-imagery-input").keyup(function (e) {
+   console.log("Event", e);
 
-   if (key === 8) {
-      console.log("The user pressed backspace!");
-      imageryCharsCount--;
-      if (imageryCharsCount < 0) {
-         console.log("You have entered negative territory");
-         imageryCharsCount = 0;
-      }
-   } else if (key === 16 || key === 18) {
-      console.log("This doesn't count");
+   const text = e.target.value;
+   const textLength = text.length;
+   if (textLength === 0) {
+      console.log("There is no text entered.");
+      $("#save-card").addClass("disabled");
+   } else if (textLength > 240) {
+      console.log("There is too much text entered.");
+      $("#save-card").addClass("disabled");
+      $("#create-char-count").removeClass("text-muted");
+      $("#create-char-count").addClass("text-danger");
    } else {
-      console.log("The user pressed other key!");
-      imageryCharsCount += 1;
-      //If the key is anything else, increment.
+      console.log("Just right.");
+      $("#save-card").removeClass("disabled");
+      $("#create-char-count").addClass("text-muted");
+      $("#create-char-count").removeClass("text-danger");
    }
-
-   /*This lets me add 1 to the variable 
-   imageryCharsCount++; also would add 1.
-   */
-   console.log("Total input chars: ", imageryCharsCount);
-   $("#create-char-count").html(imageryCharsCount);
+   console.log("Text entered: ", text);
+   console.log("The length of the text entered is", textLength);
+   $("#create-char-count").html(textLength);
 });
 
-let editTopCharsCount = 0;
-$("#edit-top-input").keypress(function () {
-   console.log("pressed key in text area");
+$("#answer-input").keyup(function (e) {
+   console.log("Event", e);
 
-   editTopCharsCount += 1; /*This lets me add 1 to the variable 
-   createImageryInputCharsCount++; also would add 1.
-   */
-   console.log("Total input chars: ", editTopCharsCount);
-   $("#edit-top-char-count").html(editTopCharsCount);
+   const text = e.target.value;
+   const textLength = text.length;
+   if (textLength === 0) {
+      console.log("There is no text entered.");
+      $("#next-card").addClass("disabled");
+   } else if (textLength > 240) {
+      console.log("There is too much text entered.");
+      $("#next-card").addClass("disabled");
+      $("#answer-char-count").removeClass("text-muted");
+      $("#answer-char-count").addClass("text-danger");
+   } else {
+      console.log("Just right.");
+      $("#next-card").removeClass("disabled");
+      $("#answer-char-count").addClass("text-muted");
+      $("#answer-char-count").removeClass("text-danger");
+   }
+   console.log("Text entered: ", text);
+   console.log("The length of the text entered is", textLength);
+   $("#answer-char-count").html(textLength);
 });
 
-let editBottomCharsCount = 0;
-$("#edit-bottom-input").keypress(function () {
-   console.log("pressed key in text area");
+$("#edit-top-input").keyup(function (e) {
+   console.log("Event", e);
 
-   editBottomCharsCount += 1; /*This lets me add 1 to the variable 
-   createImageryInputCharsCount++; also would add 1.
-   */
-   console.log("Total input chars: ", editBottomCharsCount);
-   $("#edit-bottom-char-count").html(editBottomCharsCount);
+   const text = e.target.value;
+   const textLength = text.length;
+   if (textLength === 0) {
+      console.log("There is no text entered.");
+      $("#save-edit-card").addClass("disabled");
+   } else if (textLength > 240) {
+      console.log("There is too much text entered.");
+      $("#save-edit-card").addClass("disabled");
+      $("#edit-top-char-count").removeClass("text-muted");
+      $("#edit-top-char-count").addClass("text-danger");
+   } else {
+      console.log("Just right.");
+      $("#save-edit-card").removeClass("disabled");
+      $("#edit-top-char-count").addClass("text-muted");
+      $("#edit-top-char-count").removeClass("text-danger");
+   }
+   console.log("Text entered: ", text);
+   console.log("The length of the text entered is", textLength);
+   $("#edit-top-char-count").html(textLength);
+});
+
+$("#edit-bottom-input").keyup(function (e) {
+   console.log("Event", e);
+
+   const text = e.target.value;
+   const textLength = text.length;
+   if (textLength === 0) {
+      console.log("There is no text entered.");
+      $("#save-edit-card").addClass("disabled");
+   } else if (textLength > 240) {
+      console.log("There is too much text entered.");
+      $("#save-edit-card").addClass("disabled");
+      $("#edit-bottom-char-count").removeClass("text-muted");
+      $("#edit-bottom-char-count").addClass("text-danger");
+   } else {
+      console.log("Just right.");
+      $("#save-edit-card").removeClass("disabled");
+      $("#edit-bottom-char-count").addClass("text-muted");
+      $("#edit-bottom-char-count").removeClass("text-danger");
+   }
+   console.log("Text entered: ", text);
+   console.log("The length of the text entered is", textLength);
+   $("#edit-bottom-char-count").html(textLength);
 });
