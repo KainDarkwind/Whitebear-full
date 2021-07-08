@@ -129,6 +129,13 @@ $("#edit-bottom-input").keyup(function (e) {
 
 $("#lets-go").click(function (e) {
    const emailInputLength = $("#sign-up-email-input").val().length;
+   const emailInput = $("#sign-up-email-input").val();
+
+   console.log("The email entered is:", emailInput);
+
+   //const trimmedEmail = emailInput.trim();
+   //   const lowerCasedEmail = trimmedEmail.toLowerCase();
+
    if (emailInputLength === 0) {
       console.log("There is no email text entered.");
       $("#sign-up-email-error").html("Please enter your email address.");
@@ -142,6 +149,20 @@ $("#lets-go").click(function (e) {
 
 $("#lets-go").click(function (e) {
    const passwordInputLength = $("#sign-up-password-input").val().length;
+   const passwordInput = $("#sign-up-password-input").val();
+   const emailInput = $("#sign-up-email-input").val();
+
+   console.log("The email entered is:", emailInput);
+
+   const trimmedEmail = emailInput.trim();
+   const lowerCasedEmail = trimmedEmail.toLowerCase();
+
+   const delimiter = `@`;
+   const indexOfLocalEmail = lowerCasedEmail.indexOf(delimiter);
+   console.log(`The index of local email is ${indexOfLocalEmail}.`);
+   const localEmail = lowerCasedEmail.slice(0, indexOfLocalEmail);
+   console.log(`The value of local email is ${localEmail}.`);
+
    if (passwordInputLength === 0) {
       console.log("There is no password text entered.");
       $("#sign-up-password-error").html("Please create a password.");
@@ -152,8 +173,15 @@ $("#lets-go").click(function (e) {
          "Your password must be at least 9 characters."
       );
       $("#sign-up-password-input").addClass("is-invalid");
+   } else if (passwordInput.includes(localEmail) && indexOfLocalEmail >= 4) {
+      console.log("The password cannot match email.");
+      $("#sign-up-password-error").html(
+         "All or part of your email address cannot be used in your password."
+      );
+      $("#sign-up-password-input").addClass("is-invalid");
    } else {
       console.log("The password is just right.");
+      console.log("The user's email is", lowerCasedEmail);
       $("#sign-up-password-error").html("");
       $("#sign-up-password-input").removeClass("is-invalid");
    }
