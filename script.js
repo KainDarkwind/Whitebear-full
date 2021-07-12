@@ -179,6 +179,12 @@ $("#lets-go").click(function (e) {
          "All or part of your email address cannot be used in your password."
       );
       $("#sign-up-password-input").addClass("is-invalid");
+   } else if (mostInsecurePasswords.includes(passwordInput)) {
+      console.log("The password cannot be lame.");
+      $("#sign-up-password-error").html(
+         `Your password contains a commonly used password, ${passwordInput} and can be easily discovered by attackers. Please use something else.`
+      );
+      $("#sign-up-password-input").addClass("is-invalid");
    } else {
       console.log("The password is just right.");
       console.log("The user's email is", lowerCasedEmail);
