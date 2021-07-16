@@ -163,7 +163,90 @@ $("#lets-go").click(function (e) {
    const localEmail = lowerCasedEmail.slice(0, indexOfLocalEmail);
    console.log(`The value of local email is ${localEmail}.`);
 
+   const newMostInsecurePasswords = [...mostInsecurePasswords];
+   const flatSecondMostInsecurePasswords = secondMostInsecurePasswords.flat();
+   const initialUnacceptablePasswords = [
+      ...newMostInsecurePasswords,
+      ...flatSecondMostInsecurePasswords,
+   ];
+
+   const uniqueUnacceptablePasswords = [
+      ...new Set(initialUnacceptablePasswords),
+   ];
+
+   /*const firstHolidays = allUniqHolidays.slice(0, allUniqHolidays.indexOf(2020));
+//This goes through the allUniqHolidays array from the beginning to the index of 2020, and takes everything prior to 2020, putting it in a variable called firstHolidays.
+console.log(`Here are the first holidays:`, firstHolidays);
+
+const secondHalfStartingHoliday = "Thanksgiving Day (November 28)";
+const secondHolidays = allUniqHolidays.slice(
+   allUniqHolidays.indexOf(secondHalfStartingHoliday)
+);
+
+Remove skywalker
+Create a list prior to skywalker 
+Create a list after skywalker
+Concat those two lists
+
+Remove obama2016
+Create a list prior to obama2016 from the non-skywalker list
+Create a list after obama2016
+Concat those two lists
+
+Remove duplicates with Set
+
+*/
+
+   const firstRemainingUnacceptablePasswords =
+      uniqueUnacceptablePasswords.slice(
+         0,
+         uniqueUnacceptablePasswords.indexOf("skywalker")
+      );
+   console.log(
+      "This is the first slice of passwords without skywalker",
+      firstRemainingUnacceptablePasswords
+   );
+
+   const secondRemainingUnacceptablePasswords =
+      uniqueUnacceptablePasswords.slice(
+         uniqueUnacceptablePasswords.indexOf("skywalker") + 1
+      );
+   console.log(
+      "This is the second slice of passwords without skywalker",
+      secondRemainingUnacceptablePasswords
+   );
+
+   const skywalkerlessUnacceptablePasswords = [
+      ...firstRemainingUnacceptablePasswords,
+      ...secondRemainingUnacceptablePasswords,
+   ];
+
+   const firstObamalessUnacceptablePasswords =
+      skywalkerlessUnacceptablePasswords.slice(
+         0,
+         skywalkerlessUnacceptablePasswords.indexOf("obama2016")
+      );
+   console.log(
+      "This is the first slice of passwords without obama",
+      firstObamalessUnacceptablePasswords
+   );
+
+   const secondObamalessUnacceptablePasswords =
+      skywalkerlessUnacceptablePasswords.slice(
+         skywalkerlessUnacceptablePasswords.indexOf("obama2016") + 1
+      );
+   console.log(
+      "This is the second slice of passwords without obama",
+      secondObamalessUnacceptablePasswords
+   );
+
+   const unacceptablePasswords = [
+      ...firstObamalessUnacceptablePasswords,
+      ...secondObamalessUnacceptablePasswords,
+   ];
+
    if (passwordInputLength === 0) {
+      console.log(unacceptablePasswords);
       console.log("There is no password text entered.");
       $("#sign-up-password-error").html("Please create a password.");
       $("#sign-up-password-input").addClass("is-invalid");
@@ -179,7 +262,7 @@ $("#lets-go").click(function (e) {
          "All or part of your email address cannot be used in your password."
       );
       $("#sign-up-password-input").addClass("is-invalid");
-   } else if (mostInsecurePasswords.includes(passwordInput)) {
+   } else if (unacceptablePasswords.includes(passwordInput)) {
       console.log("The password cannot be lame.");
       $("#sign-up-password-error").html(
          `Your password contains a commonly used password, ${passwordInput} and can be easily discovered by attackers. Please use something else.`
