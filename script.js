@@ -128,6 +128,92 @@ $("#edit-bottom-input").keyup(function (e) {
 });
 
 $("#lets-go").click(function (e) {
-   showEmailError();
-   showPasswordError();
+   const emailInput = $("#sign-up-email-input").val();
+   const email = emailInput.trim().toLowerCase();
+   const password = $("#sign-up-password-input").val();
+
+   const emailError = getEmailError(email);
+
+   if (emailError !== "") {
+      const element = "#sign-up-email";
+      const errorMessage = emailError;
+      showErrorMessage(element, errorMessage);
+   } else {
+      const element = "#sign-up-email";
+      const errorMessage = emailError;
+      hideErrorMessage(element, errorMessage);
+      //Else hide any error messages/styling.
+   }
+
+   const passwordError = getPasswordError(password, email);
+   console.log("Currently, passwordError is returning this:", passwordError);
+
+   if (passwordError !== "") {
+      const element = "#sign-up-password";
+      const errorMessage = passwordError;
+      showErrorMessage(element, errorMessage);
+   } else {
+      const element = "#sign-up-password";
+      const errorMessage = passwordError;
+      hideErrorMessage(element, errorMessage);
+      //Else hide any error messages/styling.
+   }
+   //If password error is not "",
+
+   showCreatedAt();
 });
+
+function showErrorMessage(element, errorMessage) {
+   //style and show error message.
+   $(`${element}-input`).addClass("is-invalid");
+   $(`${element}-error`).html(errorMessage);
+}
+
+function hideErrorMessage(element, errorMessage) {
+   //Else hide any error messages/styling.
+   $(`${element}-input`).removeClass("is-invalid");
+   $(`${element}-error`).html(errorMessage);
+}
+
+function showCreatedAt() {
+   const clickedAt = new Date(Date.now()); //This produces a date at the very moment the function runs.
+   const year = clickedAt.getFullYear();
+   const month = clickedAt.getMonth();
+   const day = clickedAt.getDate();
+   const formattedYear = String(year);
+   let formattedMonth = String(month + 1);
+   let formattedDay = String(day);
+
+   //If the formatted length is less than 2, we will concat a 0 to the left of the string.  Else we leave it.
+
+   if (formattedMonth.length < 2) {
+      console.log("The month needs padding");
+      //formattedMonth = "0" + formattedMonth;
+      formattedMonth = padLeft(formattedMonth, 2, "0");
+   }
+
+   if (formattedDay.length < 2) {
+      console.log("The day needs padding");
+      //formattedDay = 0 + formattedDay;
+      formattedDay = padLeft(formattedMonth, 2, "0");
+   }
+
+   createdAt = formattedYear + formattedMonth + formattedDay;
+   console.log(createdAt);
+}
+
+function padLeft(element, paddingAmount, paddingType) {
+   //if element length is less than padding number,
+   if (element.length < paddingAmount) {
+      const paddedNumber = paddingType + element;
+      //add padding equal to difference and return result as a string.
+      console.log("the padded element is", paddedNumber);
+      return paddedNumber;
+   } else {
+      const paddedNumber = element;
+      console.log("the unpadded element is", paddedNumber);
+      return paddedNumber;
+
+      //if element length is equal to or greater than padding number, return element as a string.
+   }
+}

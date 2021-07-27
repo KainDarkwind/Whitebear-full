@@ -1,10 +1,6 @@
-function showPasswordError() {
-   const passwordInputLength = $("#sign-up-password-input").val().length;
-   const passwordInput = $("#sign-up-password-input").val();
-   const emailInput = $("#sign-up-email-input").val();
-   const trimmedEmail = emailInput.trim();
-   const lowerCasedEmail = trimmedEmail.toLowerCase();
-   const normalizedPassword = passwordInput.toLowerCase().trim();
+function getPasswordError(password, email) {
+   const normalizedPassword = password.toLowerCase().trim();
+   const passwordInputLength = normalizedPassword.length;
 
    /*const delimiter = `@`;
     const indexOfLocalEmail = lowerCasedEmail.indexOf(delimiter);
@@ -12,12 +8,43 @@ function showPasswordError() {
     const localEmail = lowerCasedEmail.slice(0, indexOfLocalEmail);
     console.log(`The value of local email is ${localEmail}.`);*/
 
-   const listOfEmailParts = lowerCasedEmail.split("@");
+   const listOfEmailParts = email.split("@");
    // Split removes the item it is searching for, and places the other pieces into an array.  An empty string "" will return a split up list of each individual character.
 
    //console.log(listOfEmailParts);
    const localEmail = listOfEmailParts[0];
 
+   const unacceptablePasswords = getUnacceptablePasswords();
+
+   if (passwordInputLength === 0) {
+      console.log("There is no password text entered.");
+      return "Please create a password.";
+   } else if (passwordInputLength < 9) {
+      console.log("The password is too short.");
+
+      return "Your password must be at least 9 characters.";
+   } else if (
+      normalizedPassword.includes(localEmail) &&
+      localEmail.length >= 4
+   ) {
+      console.log("The password cannot match email.");
+
+      return "All or part of your email address cannot be used in your password.";
+   } else if (unacceptablePasswords.includes(normalizedPassword)) {
+      console.log("The password cannot be lame.");
+      console.log(
+         "This is the final list of unacceptable passwords:",
+         unacceptablePasswords
+      );
+      return `Your password contains a commonly used password, "${password}" and can be easily discovered by attackers. Please use something else.`;
+   } else {
+      console.log("The password is just right.");
+      console.log("The user's email is", email);
+      return "";
+   }
+}
+
+function getUnacceptablePasswords() {
    const newMostInsecurePasswords = [...mostInsecurePasswords];
    const flatSecondMostInsecurePasswords = secondMostInsecurePasswords.flat();
    const initialUnacceptablePasswords = [
@@ -31,27 +58,27 @@ function showPasswordError() {
    ];
 
    /*const firstHolidays = allUniqHolidays.slice(0, allUniqHolidays.indexOf(2020));
- //This goes through the allUniqHolidays array from the beginning to the index of 2020, and takes everything prior to 2020, putting it in a variable called firstHolidays.
- console.log(`Here are the first holidays:`, firstHolidays);
- 
- const secondHalfStartingHoliday = "Thanksgiving Day (November 28)";
- const secondHolidays = allUniqHolidays.slice(
-    allUniqHolidays.indexOf(secondHalfStartingHoliday)
- );
- 
- Remove skywalker
- Create a list prior to skywalker 
- Create a list after skywalker
- Concat those two lists
- 
- Remove obama2016
- Create a list prior to obama2016 from the non-skywalker list
- Create a list after obama2016
- Concat those two lists
- 
- Remove duplicates with Set
- 
- */
+  //This goes through the allUniqHolidays array from the beginning to the index of 2020, and takes everything prior to 2020, putting it in a variable called firstHolidays.
+  console.log(`Here are the first holidays:`, firstHolidays);
+  
+  const secondHalfStartingHoliday = "Thanksgiving Day (November 28)";
+  const secondHolidays = allUniqHolidays.slice(
+     allUniqHolidays.indexOf(secondHalfStartingHoliday)
+  );
+  
+  Remove skywalker
+  Create a list prior to skywalker 
+  Create a list after skywalker
+  Concat those two lists
+  
+  Remove obama2016
+  Create a list prior to obama2016 from the non-skywalker list
+  Create a list after obama2016
+  Concat those two lists
+  
+  Remove duplicates with Set
+  
+  */
 
    const firstRemainingUnacceptablePasswords =
       uniqueUnacceptablePasswords.slice(
@@ -59,18 +86,18 @@ function showPasswordError() {
          uniqueUnacceptablePasswords.indexOf("skywalker")
       );
    /*  console.log(
-       "This is the first slice of passwords without skywalker",
-       firstRemainingUnacceptablePasswords
-    );
- */
+        "This is the first slice of passwords without skywalker",
+        firstRemainingUnacceptablePasswords
+     );
+  */
    const secondRemainingUnacceptablePasswords =
       uniqueUnacceptablePasswords.slice(
          uniqueUnacceptablePasswords.indexOf("skywalker") + 1
       );
    /* console.log(
-       "This is the second slice of passwords without skywalker",
-       secondRemainingUnacceptablePasswords
-    );*/
+        "This is the second slice of passwords without skywalker",
+        secondRemainingUnacceptablePasswords
+     );*/
 
    const skywalkerlessUnacceptablePasswords = [
       ...firstRemainingUnacceptablePasswords,
@@ -83,18 +110,18 @@ function showPasswordError() {
          skywalkerlessUnacceptablePasswords.indexOf("obama2016")
       );
    /*  console.log(
-       "This is the first slice of passwords without obama",
-       firstObamalessUnacceptablePasswords
-    );*/
+        "This is the first slice of passwords without obama",
+        firstObamalessUnacceptablePasswords
+     );*/
 
    const secondObamalessUnacceptablePasswords =
       skywalkerlessUnacceptablePasswords.slice(
          skywalkerlessUnacceptablePasswords.indexOf("obama2016") + 1
       );
    /* console.log(
-       "This is the second slice of passwords without obama",
-       secondObamalessUnacceptablePasswords
-    );*/
+        "This is the second slice of passwords without obama",
+        secondObamalessUnacceptablePasswords
+     );*/
 
    const cleanedUnacceptablePasswords = [
       ...firstObamalessUnacceptablePasswords,
@@ -147,12 +174,12 @@ function showPasswordError() {
       //console.log("split password is", passwordLetters);
 
       /*for (let i = 0; i < listOfPasswords.length; i++) {
-          const passwordInQuestion = listOfPasswords[i];
-          const splitPassword = passwordInQuestion.split("");
-          console.log("list of passwords is", listOfPasswords);
-          console.log("password in question is", passwordInQuestion);
-          console.log("split password is", splitPassword);
-       }*/
+           const passwordInQuestion = listOfPasswords[i];
+           const splitPassword = passwordInQuestion.split("");
+           console.log("list of passwords is", listOfPasswords);
+           console.log("password in question is", passwordInQuestion);
+           console.log("split password is", splitPassword);
+        }*/
       //We will then make a copy of that array of parts with the spread ... operator.  We want to keep the original list intact.
 
       const copyOfPasswordLetters = [...passwordLetters];
@@ -174,7 +201,7 @@ function showPasswordError() {
          ]);
    }
 
-   console.log("the list so far is", unacceptableAndReversedPasswords);
+   //console.log("the list so far is", unacceptableAndReversedPasswords);
 
    //Use a for loop to lowercase every string in your list.
 
@@ -192,57 +219,13 @@ function showPasswordError() {
       unacceptableAndFormattedPasswords =
          unacceptableAndFormattedPasswords.concat([formattedPasswords]);
    }
-   console.log(
-      "Formatted and reversed passwords are",
-      unacceptableAndFormattedPasswords
-   );
+   //console.log("Formatted and reversed passwords are", unacceptableAndFormattedPasswords
+   //);
 
    //Running set to remove any crafty palindrome passwords from the final list.
    const unacceptablePasswords = [
       ...new Set(unacceptableAndFormattedPasswords),
    ];
 
-   if (passwordInputLength === 0) {
-      console.log("There is no password text entered.");
-      $("#sign-up-password-error").html("Please create a password.");
-      $("#sign-up-password-error-addendum").html(
-         "Must be at least 9 characters."
-      );
-      $("#sign-up-password-input").addClass("is-invalid");
-   } else if (passwordInputLength < 9) {
-      console.log("The password is too short.");
-      $("#sign-up-password-error").html(
-         "Your password must be at least 9 characters."
-      );
-      $("#sign-up-password-error-addendum").html("");
-      $("#sign-up-password-input").addClass("is-invalid");
-   } else if (
-      normalizedPassword.includes(localEmail) &&
-      localEmail.length >= 4
-   ) {
-      console.log("The password cannot match email.");
-      $("#sign-up-password-error").html(
-         "All or part of your email address cannot be used in your password."
-      );
-      $("#sign-up-password-error-addendum").html("");
-      $("#sign-up-password-input").addClass("is-invalid");
-   } else if (unacceptablePasswords.includes(normalizedPassword)) {
-      console.log("The password cannot be lame.");
-      $("#sign-up-password-error").html(
-         `Your password contains a commonly used password, "${passwordInput}" and can be easily discovered by attackers. Please use something else.`
-      );
-      $("#sign-up-password-error-addendum").html("");
-      $("#sign-up-password-input").addClass("is-invalid");
-      console.log(
-         "This is the final list of unacceptable passwords:",
-         unacceptablePasswords
-      );
-   } else {
-      console.log("The password is just right.");
-      console.log("The user's email is", lowerCasedEmail);
-
-      $("#sign-up-password-error").html("");
-      $("#sign-up-password-error-addendum").html("");
-      $("#sign-up-password-input").removeClass("is-invalid");
-   }
+   return unacceptablePasswords;
 }
