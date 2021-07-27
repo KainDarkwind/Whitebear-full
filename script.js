@@ -147,6 +147,9 @@ $("#lets-go").click(function (e) {
 
    const passwordError = getPasswordError(password, email);
    console.log("Currently, passwordError is returning this:", passwordError);
+   const id = getId();
+   const createdAt = getCreatedAt();
+   const userProps = [email, password, createdAt, id];
 
    if (passwordError !== "") {
       const element = "#sign-up-password";
@@ -157,10 +160,9 @@ $("#lets-go").click(function (e) {
       const errorMessage = passwordError;
       hideErrorMessage(element, errorMessage);
       //Else hide any error messages/styling.
+      console.log("The userProps are", userProps);
    }
    //If password error is not "",
-
-   showCreatedAt();
 });
 
 function showErrorMessage(element, errorMessage) {
@@ -175,7 +177,7 @@ function hideErrorMessage(element, errorMessage) {
    $(`${element}-error`).html(errorMessage);
 }
 
-function showCreatedAt() {
+function getCreatedAt() {
    const clickedAt = new Date(Date.now()); //This produces a date at the very moment the function runs.
    const year = clickedAt.getFullYear();
    const month = clickedAt.getMonth();
@@ -198,11 +200,20 @@ function showCreatedAt() {
       formattedDay = padLeft(formattedMonth, 2, "0");
    }
 
-   createdAt = formattedYear + formattedMonth + formattedDay;
-   console.log(createdAt);
+   return formattedYear + formattedMonth + formattedDay;
 }
 
-function padLeft(element, paddingAmount, paddingType) {
+function getId() {
+   const randomInt = getRandomInt(1, 999);
+   const paddedInt = padLeft(randomInt, 3, "0");
+   const createdAt = new Date(Date.now());
+   const milliseconds = createdAt.getMilliseconds();
+   const formattedMilliseconds = String(milliseconds);
+   const paddedMilliseconds = padLeft(formattedMilliseconds, 3, "0");
+   return paddedInt + paddedMilliseconds;
+}
+
+/*function padLeft(element, paddingAmount, paddingType) {
    //if element length is less than padding number,
    if (element.length < paddingAmount) {
       const paddedNumber = paddingType + element;
@@ -216,4 +227,27 @@ function padLeft(element, paddingAmount, paddingType) {
 
       //if element length is equal to or greater than padding number, return element as a string.
    }
+}*/
+
+function padLeft(num, width, char) {
+   const numAsStr = String(num);
+   let padding = "";
+   for (let i = 0; i < width; i++) {
+      padding += char;
+   }
+   console.log("Padding is", padding);
+
+   const concattedStr = padding + numAsStr;
+
+   if (numAsStr.length >= width) {
+      return numAsStr;
+   }
+   const slicedStr = concattedStr.slice(-width);
+   return slicedStr;
+}
+
+function getRandomInt(min, max) {
+   min = Math.ceil(min);
+   max = Math.floor(max);
+   return Math.floor(Math.random() * (max + 1 - min) + min); //max is normally exclusive, min is inclusive, so +1 allows you to include the max.
 }
