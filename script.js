@@ -134,36 +134,82 @@ $("#lets-go").click(function (e) {
 
    const emailError = getEmailError(email);
 
+   const user = {
+      email: email,
+      password: password,
+      createdAt: getCreatedAt(),
+      id: getId(),
+      emailTld: getTld(email),
+      socialProfiles: [
+         {
+            site: "facebook",
+            siteId: "530c2716-36e2-4a80-93b7-0e8483d629e1",
+            username: "",
+            image: {
+               sm: "",
+               orig: "",
+            },
+         },
+         {
+            site: "twitter",
+            siteId: "79023b4d-57a2-406b-8efe-bda47fb1696c",
+            username: "",
+            image: {
+               sm: "",
+               md: "",
+               orig: "",
+            },
+         },
+      ],
+   };
+
+   const activeUser = deepCopy(user);
+   activeUser.isActive = true;
+   activeUser.createdAt = getEpochMs(user.createdAt);
+   removeSmAndMdImages(activeUser.socialProfiles);
+
    if (emailError !== "") {
-      const element = "#sign-up-email";
-      const errorMessage = emailError;
-      showErrorMessage(element, errorMessage);
+      showErrorMessage("#sign-up-email", emailError);
    } else {
-      const element = "#sign-up-email";
-      const errorMessage = emailError;
-      hideErrorMessage(element, errorMessage);
+      hideErrorMessage("#sign-up-email", emailError);
       //Else hide any error messages/styling.
    }
 
    const passwordError = getPasswordError(password, email);
-   console.log("Currently, passwordError is returning this:", passwordError);
-   const id = getId();
-   const createdAt = getCreatedAt();
-   const userProps = [email, password, createdAt, id];
+   //console.log("Currently, passwordError is returning this:", passwordError);
 
    if (passwordError !== "") {
-      const element = "#sign-up-password";
-      const errorMessage = passwordError;
-      showErrorMessage(element, errorMessage);
+      showErrorMessage("#sign-up-password", passwordError);
    } else {
-      const element = "#sign-up-password";
-      const errorMessage = passwordError;
-      hideErrorMessage(element, errorMessage);
+      hideErrorMessage("#sign-up-password", passwordError);
       //Else hide any error messages/styling.
-      console.log("The userProps are", userProps);
+      console.log("The user is", user);
+      console.log("The active user is", activeUser);
    }
    //If password error is not "",
 });
+
+/*Add a property called emailTld to the user object and set its value by returning a string from a getTld() function. getTld() takes an email address as a parameter and returns the top level domain.
+
+emailTld: getTld(userEmail) // a string like “com” or “io” or “design”
+*/
+
+function getTld(email) {
+   const listOfEmailParts = email.split("@");
+   const domainEmail = listOfEmailParts[1];
+
+   if (domainEmail === undefined) {
+      return "";
+   } else {
+      const listOfDomainParts = domainEmail.split(".");
+
+      if (listOfDomainParts === undefined) {
+         return "";
+      } else {
+         return listOfDomainParts[1];
+      }
+   }
+}
 
 function showErrorMessage(element, errorMessage) {
    //style and show error message.
@@ -250,4 +296,87 @@ function getRandomInt(min, max) {
    min = Math.ceil(min);
    max = Math.floor(max);
    return Math.floor(Math.random() * (max + 1 - min) + min); //max is normally exclusive, min is inclusive, so +1 allows you to include the max.
+}
+
+function deepCopy(obj) {
+   const str = JSON.stringify(obj);
+
+   return safelyParseJson(str);
+}
+
+function safelyParseJson(str) {
+   try {
+      JSON.parse(str);
+   } catch {
+      return str;
+   }
+   return JSON.parse(str);
+}
+
+function getEpochMs(value) {
+   const originalDate = value.toString();
+   const formattedYear = originalDate.slice(0, 4);
+   const formattedMonth = originalDate.slice(4, 6) - 1;
+   const formattedDay = originalDate.slice(6);
+   const formattedDate = new Date(formattedYear, formattedMonth, formattedDay);
+   const epochMs = formattedDate.getTime();
+
+   return epochMs;
+}
+
+function removeSmAndMdImages(socialProfiles) {
+   for (let i = 0; i < socialProfiles.length; i++) {
+      const profile = socialProfiles[i];
+      const hasImageProp = profile.hasOwnProperty("image");
+      const images = profile.image;
+      const hasSmProp = images.hasOwnProperty("sm");
+      const hasMdProp = images.hasOwnProperty("md");
+
+      if (hasSmProp === true) {
+         // if this profile has sm property, remove sm property
+         delete images.sm;
+      }
+
+      if (hasMdProp === true) {
+         // if this profile has md property, remove md property
+         delete images.md;
+      }
+   }
+   return socialProfiles;
+}
+
+function removeExcessImages(array, nonExcessImage) {
+   console.log("the first part of the array socialProfiles is:", array[0]);
+
+   /*  The array I am searching is socialProfiles, which is a key in an object user.
+
+To access socialProfiles, I would use the following notation.
+
+const socialProfilesContents = user.socialProfiles;
+
+Once I am searching socialProfilesContents, I want to scan each item in the array.  Specifically speaking, that means I need to scan user.socialProfiles[0] and user.socialProfiles[1].  Generally, that means I want to scan user.socialProfiles[0] to socialProfiles["last item"]
+
+I want to scan socialProfiles[0] and access the nested image object.  user.socialProfiles[0].image*/
+
+   for (let i = 0; i < array.length; i++) {
+      const arrayKeys = Object.keys(array[i]);
+      console.log("the keys of the socialProfiles are:", arrayKeys);
+      console.log("the array length of social profiles is:", array.length);
+
+      console.log(
+         "the array length of keys in a social profile is:",
+         arrayKeys.length
+      );
+      for (let i2 = 0; i2 < arrayKeys.length; i2++) {
+         console.log("a specific key of socialProfiles is:", arrayKeys[i2]);
+      }
+      // if (arrayKeys.hasOwnProperty("image") && arrayKeys.image) {
+      // }
+
+      /*Accessing the nested image object, I want to look at the keys.
+
+If user.socialProfiles[0].image.hasOwnProperty(`orig`) !== false, delete that property.
+
+If user.socialProfiles[0].image.hasOwnProperty(`orig`) === true, leave it alone.*/
+   }
 }
