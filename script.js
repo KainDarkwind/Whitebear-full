@@ -166,7 +166,15 @@ $("#lets-go").click(function (e) {
    const activeUser = deepCopy(user);
    activeUser.isActive = true;
    activeUser.createdAt = getEpochMs(user.createdAt);
-   removeSmAndMdImages(activeUser.socialProfiles);
+   //removeSmAndMdImages(activeUser.socialProfiles);
+   activeUser.socialProfiles.forEach((socialProfile) => {
+      if (socialProfile.image.hasOwnProperty("sm")) {
+         delete socialProfile.image.sm;
+      }
+      if (socialProfile.image.hasOwnProperty("md")) {
+         delete socialProfile.image.md;
+      }
+   });
 
    if (emailError !== "") {
       showErrorMessage("#sign-up-email", emailError);
@@ -324,6 +332,18 @@ function getEpochMs(value) {
    return epochMs;
 }
 
+/*let activeUsers = [];
+
+users.forEach((user) => {
+   if (user.isActive) {
+      activeUsers = activeUsers.concat(user);
+   }
+});*/
+
+/*"list to be acted on".forEach((part of list) => {
+    stuff we want to do
+})*/
+
 function removeSmAndMdImages(socialProfiles) {
    for (let i = 0; i < socialProfiles.length; i++) {
       const profile = socialProfiles[i];
@@ -331,11 +351,6 @@ function removeSmAndMdImages(socialProfiles) {
       const images = profile.image;
       const hasSmProp = images.hasOwnProperty("sm");
       const hasMdProp = images.hasOwnProperty("md");
-
-      if (hasSmProp === true) {
-         // if this profile has sm property, remove sm property
-         delete images.sm;
-      }
 
       if (hasMdProp === true) {
          // if this profile has md property, remove md property
