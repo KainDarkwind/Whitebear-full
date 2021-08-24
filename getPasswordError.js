@@ -44,19 +44,19 @@ function getUnacceptablePasswords() {
    ];
 
    //Right here I removed all of the duplicate passwords.
-   const uniqueUnacceptablePasswords = [
-      ...new Set(initialUnacceptablePasswords),
-   ];
+   // const uniqueUnacceptablePasswords = [
+   //    ...new Set(initialUnacceptablePasswords),
+   // ];
 
    const firstRemainingUnacceptablePasswords =
-      uniqueUnacceptablePasswords.slice(
+      initialUnacceptablePasswords.slice(
          0,
-         uniqueUnacceptablePasswords.indexOf("skywalker")
+         initialUnacceptablePasswords.indexOf("skywalker")
       );
 
    const secondRemainingUnacceptablePasswords =
-      uniqueUnacceptablePasswords.slice(
-         uniqueUnacceptablePasswords.indexOf("skywalker") + 1
+      initialUnacceptablePasswords.slice(
+         initialUnacceptablePasswords.indexOf("skywalker") + 1
       );
 
    const skywalkerlessUnacceptablePasswords = [
@@ -117,7 +117,24 @@ function getUnacceptablePasswords() {
       lowerTrimmedPassword = passwordInQuestion.toLowerCase().trim();
       normalizedPasswords = normalizedPasswords.concat(lowerTrimmedPassword);
    });
-   const unacceptablePasswords = [...new Set(normalizedPasswords)]; //Running set to remove any crafty palindrome passwords from the final list.
+
+   const mappedPasswords = allInsecurePasswords.map((passwords) => {
+      const newPasswords = { ...passwords }; //Make a copy so you don't destroy the original array.
+      const newPasswordTexts = newPasswords.text;
+      // console.log("this map is returning", newPasswordTexts);
+      return newPasswordTexts;
+   });
+
+   penultimatePasswords = normalizedPasswords.concat(mappedPasswords);
+   // console.log("The penultimate passwords are", penultimatePasswords);
+
+   const longPasswords = penultimatePasswords.filter((password) => {
+      return password.length >= 9;
+   });
+
+   // console.log("The long passwords are", longPasswords);
+
+   const unacceptablePasswords = [...new Set(longPasswords)]; //Running set to remove any crafty palindrome passwords from the final list.
 
    return unacceptablePasswords;
 }

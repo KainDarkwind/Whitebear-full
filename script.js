@@ -183,6 +183,26 @@ $("#lets-go").click(function (e) {
       //Else hide any error messages/styling.
    }
 
+   const users = [user, activeUser];
+   const currentUsers = users
+      .map((user) => {
+         //Now map over each of the 2 objects in users to create a new array where each object in the array has the same 5 properties: id, email, password, createdAt, and isActive. The values for each object should be the values they previously had. Note: if an object did not previously have an isActive property, give it one and set its value to false. The result of your map should be stored in a const named normalizedUsers.
+         const newUser = {
+            id: user.id,
+            email: user.email,
+            password: user.password,
+            createdAt: user.createdAt,
+            isActive: getIsActive(user),
+         };
+         return newUser;
+      })
+      .filter((normalizedUser) => {
+         //But we’re not done yet! Chain a filter method to your map method to return only the users where isActive is true. Rename normalizedUsers to currentUsers. currentUsers should contain only one object in the array.
+         return normalizedUser.isActive;
+      });
+
+   const currentUser = currentUsers;
+
    const passwordError = getPasswordError(password, email);
    //console.log("Currently, passwordError is returning this:", passwordError);
 
@@ -193,6 +213,7 @@ $("#lets-go").click(function (e) {
       //Else hide any error messages/styling.
       console.log("The user is", user);
       console.log("The active user is", activeUser);
+      console.log("The current user is:", currentUser);
    }
    //If password error is not "",
 });
