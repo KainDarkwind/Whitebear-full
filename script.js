@@ -163,6 +163,36 @@ $("#lets-go").click(function (e) {
       ],
    };
 
+   let mostRecentSignUpDate = 0;
+
+   dbUsers.forEach((user) => {
+      if (user.createdAt > mostRecentSignUpDate) {
+         mostRecentSignUpDate = user.createdAt;
+      }
+   });
+
+   console.log("the most recent sign up date is", mostRecentSignUpDate);
+
+   const mostRecentSignUp = dbUsers.find((user) => {
+      return user.createdAt === mostRecentSignUpDate;
+   });
+
+   console.log("most recent sign up guy is", mostRecentSignUp);
+
+   const dupUserIndex = dbUsers
+      .map((user) => {
+         return user.id;
+      })
+      .findIndex((id, i, arr) => {
+         return arr.indexOf(id) !== i;
+      });
+
+   const uniqDbUsers = dbUsers.filter((user) => {
+      return dbUsers.indexOf(user) != dupUserIndex;
+   });
+
+   console.log("the unique DB Users are", uniqDbUsers);
+
    const activeUser = deepCopy(user);
    activeUser.isActive = true;
    activeUser.createdAt = getEpochMs(user.createdAt);
@@ -237,6 +267,14 @@ function getTld(email) {
       } else {
          return listOfDomainParts[1];
       }
+   }
+}
+
+function getIsActive(user) {
+   if (user.isActive === undefined) {
+      return false;
+   } else {
+      return user.isActive;
    }
 }
 
