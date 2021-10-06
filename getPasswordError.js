@@ -39,7 +39,7 @@ function getUnacceptablePasswords() {
    const flatSecondMostInsecurePasswords = secondMostInsecurePasswords
       .flat()
       .filter((password) => {
-         return typeof password != "boolean";
+         return typeof password !== "boolean";
       });
 
    const extractedAllInsecurePasswords = allInsecurePasswords.map(
@@ -55,7 +55,7 @@ function getUnacceptablePasswords() {
    ];
 
    const nobamaList = originalTriplePasswords.filter((password) => {
-      return password != "obama2016" && password != "skywalker";
+      return password !== "obama2016" && password !== "skywalker";
    });
 
    const normalizedPasswords = nobamaList.map((password) => {
@@ -66,13 +66,14 @@ function getUnacceptablePasswords() {
       return password.split("").reverse().join("");
    });
 
-   const penultimatePasswords = [...normalizedPasswords, ...mirroredPasswords];
-
-   longPasswords = penultimatePasswords.filter((password) => {
+   const penultimatePasswords = [
+      ...normalizedPasswords,
+      ...mirroredPasswords,
+   ].filter((password) => {
       return password.length >= 9;
    });
 
-   const unacceptablePasswords = [...new Set(longPasswords)];
+   const unacceptablePasswords = [...new Set(penultimatePasswords)];
 
    const arePasswordsLongEnough = unacceptablePasswords.every((password) => {
       if (password.length >= 9) {
